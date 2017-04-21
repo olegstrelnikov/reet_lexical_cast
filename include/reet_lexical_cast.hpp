@@ -38,12 +38,24 @@ template <typename T, typename CharT> struct impl<T, std::basic_string<CharT> > 
 		std::basic_istringstream<CharT> iss(from);
 		return from_istringstream<T>(iss);
 	}
+	static T lexical_cast(std::basic_string<CharT> const& from, std::locale const& l) {
+		std::basic_istringstream<CharT> iss(from);
+		iss.imbue(l);
+		iss.setf(std::ios_base::boolalpha);
+		return from_istringstream<T>(iss);
+	}
 };
 
 //to basic sting
 template <typename T, typename FromT> struct impl<std::basic_string<T>, FromT> {
 	static std::basic_string<T> lexical_cast(FromT const& from) {
 		std::basic_ostringstream<T> oss;
+		return to_string(oss, from);
+	}
+	static std::basic_string<T> lexical_cast(FromT const& from, std::locale const& l) {
+		std::basic_ostringstream<T> oss;
+		oss.imbue(l);
+		oss.setf(std::ios_base::boolalpha);
 		return to_string(oss, from);
 	}
 };
@@ -59,14 +71,26 @@ template <typename T, typename FromT> T lexical_cast(FromT const& from) {
 	return impl<T, FromT>::lexical_cast(from);
 }
 
+template <typename T, typename FromT> T lexical_cast(FromT const& from, std::locale const& l) {
+	return impl<T, FromT>::lexical_cast(from, l);
+}
+
 //from C string
 template <typename T, typename FromT> T lexical_cast(FromT const* from) {
 	return lexical_cast<T>(std::basic_string<FromT>(from));
 }
 
+template <typename T, typename FromT> T lexical_cast(FromT const* from, std::locale const& l) {
+	return lexical_cast<T>(std::basic_string<FromT>(from), l);
+}
+
 //from range of characters
 template <typename T, typename FromT> T lexical_cast(FromT const* from, std::size_t n) {
 	return lexical_cast<T>(std::basic_string<FromT>(from, n));
+}
+
+template <typename T, typename FromT> T lexical_cast(FromT const* from, std::size_t n, std::locale const& l) {
+	return lexical_cast<T>(std::basic_string<FromT>(from, n), l);
 }
 
 } //namespace reet
