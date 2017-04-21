@@ -17,7 +17,11 @@ int main() {
 	double const pi3_14 = reet::lexical_cast<double>("3.1415926", 4);
 	std::string const True = "1";
 	bool const b1 = reet::lexical_cast<bool>(True);
-	std::cout << str5 << " " << n10 << " " << u20 << " " << pi3_14 << " " << b1 << "\n";
+	std::string const alphaFalse = "false";
+	bool const b0 = reet::lexical_cast<bool>(alphaFalse, std::locale());
+	std::string const alphaTrue = reet::lexical_cast<std::string>(b1, std::locale());
+	std::cout << str5 << " " << n10 << " " << u20 << " " << pi3_14 << " " << b1 << " "
+		<< b0 << " " << alphaTrue << " " << reet::lexical_cast<std::string>(100000, std::locale("")) << "\n";
 	return 0;
 }
 
