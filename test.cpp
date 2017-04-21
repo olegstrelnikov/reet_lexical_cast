@@ -2,7 +2,7 @@
  * test.cpp
  *
  *  Created on: Apr 21, 2017
- *      Author: ois
+ *  Author: Oleg Strelnikov
  */
 
 #include <iostream>
