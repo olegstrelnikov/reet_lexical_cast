@@ -22,6 +22,9 @@ int main() {
 	std::string const alphaTrue = reet::lexical_cast<std::string>(b1, std::locale());
 	std::cout << str5 << " " << n10 << " " << u20 << " " << pi3_14 << " " << b1 << " "
 		<< b0 << " " << alphaTrue << " " << reet::lexical_cast<std::string>(100000, std::locale("")) << "\n";
+	std::cout << reet::lexical_cast<std::string>("10") << " "
+		<< reet::lexical_cast<std::string>(str10) << " "
+		<< reet::lexical_cast<std::string>(str5) << "\n";
 	return 0;
 }
 
