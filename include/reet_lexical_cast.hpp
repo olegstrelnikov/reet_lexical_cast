@@ -10,20 +10,33 @@
 
 #include <cstddef>
 #include <sstream>
+#include <locale>
 
 namespace reet {
 
+template <typename T, typename CharT>
+T from_istringstream(std::basic_istringstream<CharT>& istream) {
+	T t;
+	istream >> t;
+	return t;
+}
+
+template <typename T, typename CharT>
+std::basic_string<CharT> to_string(std::basic_ostringstream<CharT>& ostream, T const& from) {
+	ostream << from;
+	return ostream.str();
+}
+
 template <typename T, typename FromT> struct impl {
 	static T lexical_cast(FromT const& from);
+	static T lexical_cast(FromT const& from, std::locale);
 };
 
 //from basic string
-template <typename T, typename FromT> struct impl<T, std::basic_string<FromT> > {
-	static T lexical_cast(std::basic_string<FromT> const& from) {
-		std::basic_istringstream<FromT> iss(from);
-		T t;
-		iss >> t;
-		return t;
+template <typename T, typename CharT> struct impl<T, std::basic_string<CharT> > {
+	static T lexical_cast(std::basic_string<CharT> const& from) {
+		std::basic_istringstream<CharT> iss(from);
+		return from_istringstream<T>(iss);
 	}
 };
 
@@ -31,8 +44,7 @@ template <typename T, typename FromT> struct impl<T, std::basic_string<FromT> > 
 template <typename T, typename FromT> struct impl<std::basic_string<T>, FromT> {
 	static std::basic_string<T> lexical_cast(FromT const& from) {
 		std::basic_ostringstream<T> oss;
-		oss << from;
-		return oss.str();
+		return to_string(oss, from);
 	}
 };
 
